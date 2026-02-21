@@ -34,6 +34,19 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  tutorProfiles TutorProfile[]
   @@index([status])
   @@map("users")
+}
+
+model TutorProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  bio         String
+  hourlyRate  Float
+  experience  Int
+  categoryId  String
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])  
 }
