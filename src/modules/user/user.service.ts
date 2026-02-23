@@ -42,7 +42,21 @@ const updateUser = async (
 ) => {
   const result = await prisma.user.update({
     where: { id },
-    data,
+    data: {
+      name: data.name,
+      email: data.email,
+      role: data.role,      
+      status: data.status,      
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+    }
   });
   return result;
 };
