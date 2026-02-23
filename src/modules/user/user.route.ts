@@ -4,9 +4,9 @@ import auth, { UserRole } from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.get("/users", auth(UserRole.tutor), UserController.getUser);
+router.get("/users", auth(UserRole.admin), UserController.getUser);
 
-router.get("/users/:id", auth(UserRole.tutor),  UserController.getSingleUser);
+router.get("/users/:id", auth(UserRole.admin),  UserController.getSingleUser);
 
 router.put("/users/:id", UserController.updateUser);
 

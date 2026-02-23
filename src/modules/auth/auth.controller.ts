@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
-import { success } from "zod";
-import { error } from "node:console";
 
 const createUser = async (req: Request, res: Response) => {
   try {
