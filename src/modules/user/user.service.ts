@@ -2,7 +2,18 @@ import { prisma } from "../../lib/prisma";
 
 
 const getUser = async () => {
-  const result = await prisma.user.findMany();
+  const result = await prisma.user.findMany({
+    select: {
+    id: true,
+    name: true,
+    email: true,
+    role: true,
+    status: true,
+    createdAt: true,
+    updatedAt: true,
+    tutorProfile: true,
+  },
+});
   return result;
 };
 

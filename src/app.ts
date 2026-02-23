@@ -10,7 +10,7 @@ app.use(cors());
 
 // application routes
 app.use('/api/auth', AuthRoutes);
-app.use('/', UserRoutes);
+app.use('/api/admin', UserRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello from Skill Bridge World!');

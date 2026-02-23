@@ -1,14 +1,15 @@
 import express from 'express';
 import { UserController } from './user.controller';
+import auth, { UserRole } from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.get("/api/admin/users",  UserController.getUser);
+router.get("/users", auth(UserRole.tutor), UserController.getUser);
 
-router.get("/api/users/:id",  UserController.getSingleUser);
+router.get("/users/:id", auth(UserRole.tutor),  UserController.getSingleUser);
 
-router.put("/api/admin/users/:id", UserController.updateUser);
+router.put("/users/:id", UserController.updateUser);
 
-router.delete("/api/admin/users/:id", UserController.deleteUser);
+router.delete("/users/:id", UserController.deleteUser);
 
 export const UserRoutes = router;
