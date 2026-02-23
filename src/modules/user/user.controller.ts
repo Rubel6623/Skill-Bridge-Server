@@ -52,16 +52,9 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, email,role } = req.body; 
+    const { name, email, role, avatar, status } = req.body; 
 
-    if(role==='STUDENT' && role==='TUTOR'){
-      res.status(403).json({
-        success: false,
-        message: "Only admins can update user roles",
-      });
-      return;
-    }
-      const result = await UserServices.updateUser(id as string, name, email,role );
+    const result = await UserServices.updateUser(id as string, { name, email, role, avatar, status });
 
       res.status(200).json({
         success: true,

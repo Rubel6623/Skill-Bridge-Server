@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/api/admin/users",  UserController.getUser);
 
-router.get("/:id",  UserController.getSingleUser);
+router.get("/api/users/:id",  UserController.getSingleUser);
 
 router.put("/api/admin/users/:id", UserController.updateUser);
 

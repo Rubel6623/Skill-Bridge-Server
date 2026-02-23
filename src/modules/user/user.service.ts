@@ -10,30 +10,28 @@ const getUser = async () => {
 const getSingleUser = async (id: string) => {
   const result = await prisma.user.findUnique({
     where: { id },
-    // include: {
-    //   tutorProfile: {
-    //     include: {
-    //       subjects: {
-    //         include: { category: true },
-    //       },
-    //       availability: true,
-    //       reviews: true,
-    //     },
-    //   },
-    // },
+    include: {
+      tutorProfile: {
+        include: {
+          subjects: {
+            include: { category: true }
+          },
+          availability: true,
+          reviews: true,
+        },
+      },
+    },
   });
   return result;
 };
 
-
 const updateUser = async (
-id: string, data: { name?: string; role?: string; email?: string; }, email: any, p0: string | string[]) => {
+  id: string,
+  data: { name?: string; email?: string; role?: any; avatar?: string; status?: any }
+) => {
   const result = await prisma.user.update({
     where: { id },
-    data: {
-      name: data.name,
-      email: data.email,
-    },
+    data,
   });
   return result;
 };

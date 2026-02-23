@@ -26,28 +26,104 @@ enum Status {
 }
 
 model User {
-  id    String @id @default(uuid())
-  name  String 
-  email String @unique
-  password String
-  role   Role
-  status Status  @default(ACTIVE)
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  avatar    String?
+  status    Status   @default(ACTIVE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tutorProfiles TutorProfile[]
+  tutorProfile TutorProfile?
+  bookings     Booking[]     @relation("StudentBookings")
+  reviews      Review[]
+
   @@index([status])
   @@map("users")
 }
 
 model TutorProfile {
-  id          String   @id @default(uuid())
-  userId      String   @unique
-  bio         String
-  hourlyRate  Float
-  experience  Int
-  categoryId  String
-  createdAt   DateTime @default(now())
+  id           String @id @default(uuid())
+  bio          String 
+  avatar       String?
+  pricePerHour Float
+  rating       Float  @default(0.0)
+  experience   Int    @default(0)
+  userId       String @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  user        User     @relation(fields: [userId], references: [id])  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  subjects TutorSubject[]
+  availability Availability[]
+  bookings     Booking[]      @relation("TutorBookings")
+  reviews      Review[]       @relation("TutorReviews")
+
+  @@map("tutorProfiles")
+}
+
+model TutorSubject {
+  id             String @id @default(uuid())
+  tutorProfileId String
+  categoryId     String
+  thumbnail      String?
+
+  tutorProfile TutorProfile @relation(fields: [tutorProfileId], references: [id], onDelete: Cascade)
+  category     Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([tutorProfileId, categoryId])
+  @@map("tutor_subjects")
+}
+
+model Category {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  slug          String         @unique
+  tutorSubjects TutorSubject[] 
+}
+
+model Availability {
+  id             String       @id @default(uuid())
+  dayOfWeek      Int
+  startTime      String
+  endTime        String
+  tutorProfileId String
+  tutorProfile   TutorProfile @relation(fields: [tutorProfileId], references: [id], onDelete: Cascade)
+}
+
+model Booking {
+  id         String        @id @default(uuid())
+  startTime  DateTime
+  endTime    DateTime
+  status     BookingStatus @default(CONFIRMED)
+  totalPrice Float
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  studentId String
+  student   User   @relation("StudentBookings", fields: [studentId], references: [id])
+
+  tutorProfileId String
+  tutorProfile   TutorProfile @relation("TutorBookings", fields: [tutorProfileId], references: [id])
+
+  review Review?
+  @@map("bookings")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int 
+  comment   String   
+  createdAt DateTime @default(now())
+
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id])
+
+  tutorProfileId String
+  tutorProfile   TutorProfile @relation("TutorReviews", fields: [tutorProfileId], references: [id])
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id])
 }
