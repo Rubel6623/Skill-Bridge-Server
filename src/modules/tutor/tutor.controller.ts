@@ -1,6 +1,25 @@
 import { Request, Response } from "express";
 import { TutorServices } from "./tutor.service";
 
+
+const createTutorProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id; 
+    const result = await TutorServices.createTutorProfileIntoDB(userId, req.body);
+
+    res.status(201).json({
+      success: true,
+      message: 'Tutor profile created successfully!',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to create profile',
+    });
+  }
+};
+
 const getAllTutors = async (req: Request, res: Response) => {
   try {
     const filters = req.query; 
@@ -95,6 +114,7 @@ const updateAvailability = async (req: Request, res: Response) => {
 };
 
 export const TutorController = {
+  createTutorProfile,
   getAllTutors,
   getTutorById,
   updateTutorProfile,

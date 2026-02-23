@@ -1,7 +1,30 @@
 import { prisma } from "../../lib/prisma";
 
-const getAllTutors = async (filters: any) => {
-  
+const createTutorProfileIntoDB = async (userId: string, payload: any) => {
+  const { bio, pricePerHour, subjects } = payload;
+
+  // We use a transaction or a nested create to link subjects
+  const result = await prisma.tutorProfile.create({
+    data: {
+      userId,
+      bio,
+      pricePerHour,
+      subjects: {
+        create: subjects.map((subject: any) => ({
+          categoryId: subject.categoryId,
+          thumbnail: subject.thumbnail,
+        })),
+      },
+    },
+    include: {
+      subjects: true,
+    },
+  });
+
+  return result;
+};
+
+const getAllTutors = async (filters: any) => {  
   const where = {};
   
   if (filters.categoryId) {
@@ -10,8 +33,7 @@ const getAllTutors = async (filters: any) => {
         categoryId: filters.categoryId
       }
     };
-  }
-  
+  }  
   const result = await prisma.tutorProfile.findMany({
     where,
     include: {
@@ -98,6 +120,7 @@ const updateAvailability = async (tutorProfileId: string, availabilityData: any[
 };
 
 export const TutorServices = {
+  createTutorProfileIntoDB,
   getAllTutors,
   getTutorById,
   updateTutorProfile,

@@ -5,6 +5,7 @@ import { UserRoutes } from './modules/user/user.route';
 import { TutorRoutes } from './modules/tutor/tutor.route';
 import { CategoryRoutes } from './modules/category/category.route';
 import { BookingRoutes } from './modules/booking/booking.route';
+import { ReviewRoutes } from './modules/review/review.route';
 
 
 const app: Application = express();
@@ -17,6 +18,7 @@ app.use('/api/admin', UserRoutes);
 app.use('/api/tutors', TutorRoutes);
 app.use('/api', CategoryRoutes);
 app.use('/api/bookings', BookingRoutes);
+app.use('/api', ReviewRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {

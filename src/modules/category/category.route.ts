@@ -3,8 +3,8 @@ import { CategoryController } from './category.controller';
 
 const router = express.Router();
 
-router.get("/categories", CategoryController.getAllCategories);
 router.post("/admin/categories", CategoryController.createCategory);
+router.get("/categories", CategoryController.getAllCategories);
 router.patch("/admin/categories/:id", CategoryController.updateCategory);
 router.delete("/admin/categories/:id", CategoryController.deleteCategory);
 

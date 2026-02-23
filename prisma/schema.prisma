@@ -71,8 +71,8 @@ model TutorSubject {
   categoryId     String
   thumbnail      String?
 
-  tutorProfile TutorProfile @relation(fields: [tutorProfileId], references: [id], onDelete: Cascade)
-  category     Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  tutorProfile TutorProfile @relation(fields: [tutorProfileId], references: [id])
+  category     Category     @relation(fields: [categoryId], references: [id])
 
   @@unique([tutorProfileId, categoryId])
   @@map("tutor_subjects")
