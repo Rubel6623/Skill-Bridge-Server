@@ -39,7 +39,36 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
+
+const getMe = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+
+    const result = await AuthService.getMeFromDB(userId);
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User profile retrieved successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
+
 export const AuthController = {
   createUser,
   loginUser,
+  getMe
 };

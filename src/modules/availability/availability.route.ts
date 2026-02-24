@@ -4,7 +4,7 @@ import auth, { UserRole } from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.put('/set-slots',auth(UserRole.tutor),AvailabilityController.setAvailability);
+router.put('/tutor/availability',auth(UserRole.tutor),AvailabilityController.setAvailability);
 
 router.get('/:tutorProfileId',AvailabilityController.getTutorAvailability);
 

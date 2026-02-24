@@ -87,7 +87,7 @@ model Category {
 
 model Availability {
   id             String       @id @default(uuid())
-  dayOfWeek      Int
+  dayOfWeek      String
   startTime      String
   endTime        String
   tutorProfileId String

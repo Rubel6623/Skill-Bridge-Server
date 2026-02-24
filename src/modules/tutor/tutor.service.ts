@@ -23,34 +23,54 @@ const createTutorProfileIntoDB = async (userId: string, payload: any) => {
   return result;
 };
 
-const getAllTutors = async (filters: any) => {  
-  const where = {};
+const getAllTutors = async (filters: any) => {
+  const { categoryName, categoryId, searchTerm, minPrice, maxPrice, page = 1, limit = 10 } = filters;
   
-  if (filters.categoryId) {
-    (where as any).subjects = {
+  const pageNumber = Number(page);
+  const limitNumber = Number(limit);
+  const skip = (pageNumber - 1) * limitNumber;
+
+  const where: any = {};
+
+  // 1. Filter by Category ID (Exact match)
+  if (categoryId) {
+    where.subjects = {
+      some: { categoryId }
+    };
+  }
+
+  // 2. Filter by Category Name (Partial/Insensitive match)
+  if (categoryName) {
+    where.subjects = {
       some: {
-        categoryId: filters.categoryId
+        category: {
+          name: {
+            contains: categoryName,
+            mode: 'insensitive'
+          }
+        }
       }
     };
-  }  
+  }
+
   const result = await prisma.tutorProfile.findMany({
     where,
+    skip,
+    take: limitNumber,
     include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          avatar: true,
-        },
-      },
-      subjects: {
-        include: { category: true }
-      },
+      user: { select: { id: true, name: true, email: true, avatar: true } },
+      subjects: { include: { category: true } },
     },
   });
-  return result;
+
+  const total = await prisma.tutorProfile.count({ where });
+
+  return {
+    meta: { page: pageNumber, limit: limitNumber, total },
+    data: result
+  };
 };
+
 
 const getTutorById = async (id: string) => {
   const result = await prisma.tutorProfile.findUnique({

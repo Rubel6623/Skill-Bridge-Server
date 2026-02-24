@@ -6,11 +6,11 @@ const router = express.Router();
 
 router.post('/create-profile',auth(UserRole.tutor),TutorController.createTutorProfile);
 
-router.get("/", TutorController.getAllTutors);
+router.get("/tutors", TutorController.getAllTutors);
 
-router.get("/:id", TutorController.getTutorById);
+router.get("/tutors/:id", TutorController.getTutorById);
 
-router.put("/profile/:id",auth(UserRole.tutor), TutorController.updateTutorProfile);
+router.put("/tutor/profile",auth(UserRole.tutor), TutorController.updateTutorProfile);
 
 router.put("/availability/:id", TutorController.updateAvailability);
 

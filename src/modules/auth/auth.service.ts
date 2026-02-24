@@ -47,7 +47,34 @@ const loginUserIntoDB = async (payload: any) => {
   };
 };
 
+
+const getMeFromDB = async (userId: string) => {
+  const result = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      avatar: true,
+      status: true,
+      createdAt: true,
+      tutorProfile: {
+        include: {
+          subjects: {
+            include: { category: true }
+          },
+          availability: true
+        }
+      }
+    }
+  });
+  return result;
+};
+
+
 export const AuthService = {
   createUserIntoDB,
   loginUserIntoDB,
+  getMeFromDB
 };

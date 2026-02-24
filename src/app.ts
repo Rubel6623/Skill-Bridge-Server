@@ -16,11 +16,11 @@ app.use(cors());
 // application routes
 app.use('/api/auth', AuthRoutes);
 app.use('/api/admin', UserRoutes);
-app.use('/api/tutors', TutorRoutes);
+app.use('/api', TutorRoutes);
 app.use('/api', CategoryRoutes);
 app.use('/api/bookings', BookingRoutes);
 app.use('/api', ReviewRoutes);
-app.use('/api/tutors', AvailabilityRoutes)
+app.use('/api', AvailabilityRoutes)
 
 
 app.get('/', (req: Request, res: Response) => {
