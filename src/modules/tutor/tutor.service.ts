@@ -3,7 +3,6 @@ import { prisma } from "../../lib/prisma";
 const createTutorProfileIntoDB = async (userId: string, payload: any) => {
   const { bio, pricePerHour, subjects } = payload;
 
-  // We use a transaction or a nested create to link subjects
   const result = await prisma.tutorProfile.create({
     data: {
       userId,
@@ -84,14 +83,33 @@ const getTutorById = async (id: string) => {
   return result;
 };
 
-const updateTutorProfile = async (id: string, data: any) => {
+const updateTutorProfile = async (userId: string, payload: any) => {
+  const { subjects, ...profileData } = payload;
+
   const result = await prisma.tutorProfile.update({
-    where: { id },
-    data,
-    include: {
-      user: true,
+    where: { userId: userId }, 
+    data: {
+      ...profileData,
       subjects: {
-        include: { category: true }
+        deleteMany: {},
+        create: subjects?.map((sub: any) => ({
+          categoryId: sub.categoryId,
+          thumbnail: sub.thumbnail,
+        })),
+      },
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          status: true,
+        },
+      },
+      subjects: {
+        include: { category: true },
       },
     },
   });

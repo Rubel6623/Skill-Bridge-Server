@@ -68,7 +68,7 @@ const getTutorById = async (req: Request, res: Response) => {
 
 const updateTutorProfile = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
     const result = await TutorServices.updateTutorProfile(id as string, req.body);
 
     res.status(200).json({
@@ -80,15 +80,14 @@ const updateTutorProfile = async (req: Request, res: Response) => {
     if (err.code === "P2025") {
       res.status(404).json({
         success: false,
-        message: "Tutor not found",
+        message: "Tutor profile not found",
       });
       return;
     }
 
     res.status(500).json({
       success: false,
-      message: err.message,
-      details: err,
+      message: err.message || "Internal Server Error",
     });
   }
 };

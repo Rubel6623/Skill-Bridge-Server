@@ -10,7 +10,7 @@ router.get("/", TutorController.getAllTutors);
 
 router.get("/:id", TutorController.getTutorById);
 
-router.put("/profile/:id", TutorController.updateTutorProfile);
+router.put("/profile/:id",auth(UserRole.tutor), TutorController.updateTutorProfile);
 
 router.put("/availability/:id", TutorController.updateAvailability);
 

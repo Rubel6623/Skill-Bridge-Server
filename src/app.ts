@@ -6,6 +6,7 @@ import { TutorRoutes } from './modules/tutor/tutor.route';
 import { CategoryRoutes } from './modules/category/category.route';
 import { BookingRoutes } from './modules/booking/booking.route';
 import { ReviewRoutes } from './modules/review/review.route';
+import { AvailabilityRoutes } from './modules/availability/availability.route';
 
 
 const app: Application = express();
@@ -19,6 +20,7 @@ app.use('/api/tutors', TutorRoutes);
 app.use('/api', CategoryRoutes);
 app.use('/api/bookings', BookingRoutes);
 app.use('/api', ReviewRoutes);
+app.use('/api/tutors', AvailabilityRoutes)
 
 
 app.get('/', (req: Request, res: Response) => {
