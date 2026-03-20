@@ -160,10 +160,33 @@ const updateAvailability = async (tutorProfileId: string, availabilityData: any[
   });
 };
 
+const getAllTutorSubjects = async () => {
+  const result = await prisma.tutorSubject.findMany({
+    include: {
+      category: true, 
+      tutorProfile: {
+        include: {
+          user: {
+            select: {
+              name: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return result;
+};
+
+
+
 export const TutorServices = {
   createTutorProfileIntoDB,
   getAllTutors,
   getTutorById,
   updateTutorProfile,
   updateAvailability,
+  getAllTutorSubjects
 };

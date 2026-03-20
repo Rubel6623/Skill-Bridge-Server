@@ -113,10 +113,28 @@ const updateAvailability = async (req: Request, res: Response) => {
   }
 };
 
+const getAllTutorSubjects = async (req: Request, res: Response) => {
+  try {
+    const result = await TutorServices.getAllTutorSubjects();
+
+    res.status(200).json({
+      success: true,
+      message: "Tutor subjects retrieved successfully",
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Internal Server Error",
+    });
+  }
+};
+
 export const TutorController = {
   createTutorProfile,
   getAllTutors,
   getTutorById,
   updateTutorProfile,
   updateAvailability,
+  getAllTutorSubjects
 };
