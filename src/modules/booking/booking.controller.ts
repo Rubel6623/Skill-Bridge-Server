@@ -5,6 +5,15 @@ import { BookingStatus } from "../../../generated/prisma/enums";
 const createBooking = async (req: Request, res: Response) => {
   try {
     const { studentId, tutorProfileId, startTime, endTime, totalPrice } = req.body;
+
+    if (new Date(startTime) >= new Date(endTime)) {
+      res.status(400).json({ 
+        success: false, 
+        message: "End time must be after start time" 
+      });
+      return;
+    }
+
     const result = await BookingServices.createBooking({ studentId, tutorProfileId, startTime, endTime, totalPrice });
 
     res.status(201).json({
@@ -23,7 +32,8 @@ const createBooking = async (req: Request, res: Response) => {
 
 const getUserBookings = async (req: Request, res: Response) => {
   try {
-    const { userId, role } = req.query as { userId: string, role: string };
+    const userId = (req as any).user.id; 
+    const role = (req as any).user.role;
 
     if (!userId || !role) {
       res.status(400).json({ success: false, message: "Missing userId or role" });

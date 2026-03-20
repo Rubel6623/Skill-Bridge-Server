@@ -8,7 +8,9 @@ const createBooking = async (data: {
   endTime: string;
   totalPrice: number;
 }) => {
+  
   const result = await prisma.booking.create({
+    
     data: {
       studentId: data.studentId,
       tutorProfileId: data.tutorProfileId,

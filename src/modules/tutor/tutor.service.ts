@@ -1,22 +1,27 @@
 import { prisma } from "../../lib/prisma";
 
-const createTutorProfileIntoDB = async (userId: string, payload: any) => {
-  const { bio, pricePerHour, subjects } = payload;
+const createTutorProfileIntoDB = async (userId: string, userRole:string, payload: any) => {
+  const { bio, pricePerHour, subjects, experience} = payload;
 
   const result = await prisma.tutorProfile.create({
     data: {
       userId,
       bio,
       pricePerHour,
+      experience,
       subjects: {
         create: subjects.map((subject: any) => ({
           categoryId: subject.categoryId,
-          thumbnail: subject.thumbnail,
+          title: subject.title
         })),
       },
     },
     include: {
-      subjects: true,
+      subjects: {
+        include: {
+          category: true 
+        }
+      },
     },
   });
 
@@ -32,14 +37,13 @@ const getAllTutors = async (filters: any) => {
 
   const where: any = {};
 
-  // 1. Filter by Category ID (Exact match)
   if (categoryId) {
     where.subjects = {
       some: { categoryId }
     };
   }
 
-  // 2. Filter by Category Name (Partial/Insensitive match)
+  
   if (categoryName) {
     where.subjects = {
       some: {
@@ -114,7 +118,7 @@ const updateTutorProfile = async (userId: string, payload: any) => {
         deleteMany: {},
         create: subjects?.map((sub: any) => ({
           categoryId: sub.categoryId,
-          thumbnail: sub.thumbnail,
+          title: sub.title
         })),
       },
     },
@@ -150,7 +154,6 @@ const updateAvailability = async (tutorProfileId: string, availabilityData: any[
       })),
     });
   }
-
   
   return prisma.availability.findMany({
     where: { tutorProfileId },

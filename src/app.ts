@@ -18,7 +18,7 @@ app.use('/api/auth', AuthRoutes);
 app.use('/api/admin', UserRoutes);
 app.use('/api', TutorRoutes);
 app.use('/api', CategoryRoutes);
-app.use('/api/bookings', BookingRoutes);
+app.use('/api', BookingRoutes);
 app.use('/api', ReviewRoutes);
 app.use('/api', AvailabilityRoutes)
 

@@ -1,18 +1,34 @@
 import { prisma } from "../../lib/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { Role } from "../../../generated/prisma/enums";
 
-const createUserIntoDB = async (payload: any) => {
+interface ILoginPayload {
+  email: string;
+  password: string;
+}
+
+interface IRegisterPayload extends ILoginPayload {
+  name: string;
+  role: Role;
+  avatar?: string;
+}
+
+const createUserIntoDB = async (payload: IRegisterPayload) => {
     const hashPassword = await bcrypt.hash(payload.password, 8);
 
     const result = await prisma.user.create({
-      data: { ...payload, password: hashPassword },
+      data: { 
+        ...payload, 
+        password: hashPassword,
+        role: payload.role.toUpperCase() as Role
+      },
     });
     const { password, ...newResult } = result;
     return newResult;
 };
 
-const loginUserIntoDB = async (payload: any) => {
+const loginUserIntoDB = async (payload: ILoginPayload) => {
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {
@@ -28,8 +44,8 @@ const loginUserIntoDB = async (payload: any) => {
 
   const userData = {
     id: user.id,
+    name: user.name,
     email: user.email,
-    password: user.password,
     role: user.role,
     status: user.status
   }
@@ -40,6 +56,7 @@ const loginUserIntoDB = async (payload: any) => {
     token,
     user: {
       id: user.id,
+      name: user.name,
       email: user.email,
       role: user.role,
       status: user.status

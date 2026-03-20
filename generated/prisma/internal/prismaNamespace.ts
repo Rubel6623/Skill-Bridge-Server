@@ -1001,7 +1001,7 @@ export const TutorSubjectScalarFieldEnum = {
   id: 'id',
   tutorProfileId: 'tutorProfileId',
   categoryId: 'categoryId',
-  thumbnail: 'thumbnail'
+  title: 'title'
 } as const
 
 export type TutorSubjectScalarFieldEnum = (typeof TutorSubjectScalarFieldEnum)[keyof typeof TutorSubjectScalarFieldEnum]
@@ -1010,7 +1010,8 @@ export type TutorSubjectScalarFieldEnum = (typeof TutorSubjectScalarFieldEnum)[k
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  slug: 'slug'
+  slug: 'slug',
+  thumbnail: 'thumbnail'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -1036,7 +1037,8 @@ export const BookingScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   studentId: 'studentId',
-  tutorProfileId: 'tutorProfileId'
+  tutorProfileId: 'tutorProfileId',
+  tutorSubjectId: 'tutorSubjectId'
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]

@@ -4,8 +4,9 @@ import { TutorServices } from "./tutor.service";
 
 const createTutorProfile = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id; 
-    const result = await TutorServices.createTutorProfileIntoDB(userId, req.body);
+    const userId = (req as any).user.id;
+    const userRole = ( req as any).user.role;   
+    const result = await TutorServices.createTutorProfileIntoDB(userId,userRole, req.body);
 
     res.status(201).json({
       success: true,
@@ -13,6 +14,7 @@ const createTutorProfile = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to create profile',
@@ -68,8 +70,8 @@ const getTutorById = async (req: Request, res: Response) => {
 
 const updateTutorProfile = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const result = await TutorServices.updateTutorProfile(id as string, req.body);
+    const userID = (req as any).user.id;
+    const result = await TutorServices.updateTutorProfile(userID, req.body);
 
     res.status(200).json({
       success: true,
@@ -84,7 +86,6 @@ const updateTutorProfile = async (req: Request, res: Response) => {
       });
       return;
     }
-
     res.status(500).json({
       success: false,
       message: err.message || "Internal Server Error",

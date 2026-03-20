@@ -30,7 +30,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      Role
+  role      Role?
   avatar    String?
   status    Status   @default(ACTIVE)
   createdAt DateTime @default(now())
@@ -69,10 +69,11 @@ model TutorSubject {
   id             String @id @default(uuid())
   tutorProfileId String
   categoryId     String
-  thumbnail      String?
-
+  title          String?
   tutorProfile TutorProfile @relation(fields: [tutorProfileId], references: [id])
   category     Category     @relation(fields: [categoryId], references: [id])
+
+  bookings     Booking[]
 
   @@unique([tutorProfileId, categoryId])
   @@map("tutor_subjects")
@@ -82,6 +83,7 @@ model Category {
   id            String         @id @default(uuid())
   name          String         @unique
   slug          String         @unique
+  thumbnail     String?
   tutorSubjects TutorSubject[] 
 }
 
@@ -107,6 +109,9 @@ model Booking {
 
   tutorProfileId String
   tutorProfile   TutorProfile @relation("TutorBookings", fields: [tutorProfileId], references: [id])
+
+  tutorSubjectId String?
+  tutorSubject   TutorSubject? @relation(fields: [tutorSubjectId], references: [id])
 
   review Review?
   @@map("bookings")

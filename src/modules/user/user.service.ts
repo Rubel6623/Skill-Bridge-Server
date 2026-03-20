@@ -11,7 +11,7 @@ const getUser = async () => {
     status: true,
     createdAt: true,
     updatedAt: true,
-    tutorProfile: true,
+    tutorProfile: true
   },
 });
   return result;

@@ -4,12 +4,12 @@ import auth, { UserRole } from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.post("/", BookingController.createBooking);
+router.post("/booking", BookingController.createBooking);
 
-router.get("/", BookingController.getUserBookings);
+router.get("/booking", auth(UserRole.student, UserRole.tutor, UserRole.admin), BookingController.getUserBookings);
 
-router.get("/:id", BookingController.getBookingById);
+router.get("/booking/:id", auth(UserRole.student, UserRole.tutor, UserRole.admin), BookingController.getBookingById);
 
-router.put("/:id/status", auth(UserRole.admin, UserRole.tutor),BookingController.updateBookingStatus); 
+router.put("/booking/:id/status", auth(UserRole.admin, UserRole.tutor),BookingController.updateBookingStatus); 
 
 export const BookingRoutes = router;

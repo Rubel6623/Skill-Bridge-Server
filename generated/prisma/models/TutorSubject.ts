@@ -28,21 +28,21 @@ export type TutorSubjectMinAggregateOutputType = {
   id: string | null
   tutorProfileId: string | null
   categoryId: string | null
-  thumbnail: string | null
+  title: string | null
 }
 
 export type TutorSubjectMaxAggregateOutputType = {
   id: string | null
   tutorProfileId: string | null
   categoryId: string | null
-  thumbnail: string | null
+  title: string | null
 }
 
 export type TutorSubjectCountAggregateOutputType = {
   id: number
   tutorProfileId: number
   categoryId: number
-  thumbnail: number
+  title: number
   _all: number
 }
 
@@ -51,21 +51,21 @@ export type TutorSubjectMinAggregateInputType = {
   id?: true
   tutorProfileId?: true
   categoryId?: true
-  thumbnail?: true
+  title?: true
 }
 
 export type TutorSubjectMaxAggregateInputType = {
   id?: true
   tutorProfileId?: true
   categoryId?: true
-  thumbnail?: true
+  title?: true
 }
 
 export type TutorSubjectCountAggregateInputType = {
   id?: true
   tutorProfileId?: true
   categoryId?: true
-  thumbnail?: true
+  title?: true
   _all?: true
 }
 
@@ -145,7 +145,7 @@ export type TutorSubjectGroupByOutputType = {
   id: string
   tutorProfileId: string
   categoryId: string
-  thumbnail: string | null
+  title: string | null
   _count: TutorSubjectCountAggregateOutputType | null
   _min: TutorSubjectMinAggregateOutputType | null
   _max: TutorSubjectMaxAggregateOutputType | null
@@ -173,18 +173,20 @@ export type TutorSubjectWhereInput = {
   id?: Prisma.StringFilter<"TutorSubject"> | string
   tutorProfileId?: Prisma.StringFilter<"TutorSubject"> | string
   categoryId?: Prisma.StringFilter<"TutorSubject"> | string
-  thumbnail?: Prisma.StringNullableFilter<"TutorSubject"> | string | null
+  title?: Prisma.StringNullableFilter<"TutorSubject"> | string | null
   tutorProfile?: Prisma.XOR<Prisma.TutorProfileScalarRelationFilter, Prisma.TutorProfileWhereInput>
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
+  bookings?: Prisma.BookingListRelationFilter
 }
 
 export type TutorSubjectOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   tutorProfileId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
-  thumbnail?: Prisma.SortOrderInput | Prisma.SortOrder
+  title?: Prisma.SortOrderInput | Prisma.SortOrder
   tutorProfile?: Prisma.TutorProfileOrderByWithRelationInput
   category?: Prisma.CategoryOrderByWithRelationInput
+  bookings?: Prisma.BookingOrderByRelationAggregateInput
 }
 
 export type TutorSubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -195,16 +197,17 @@ export type TutorSubjectWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.TutorSubjectWhereInput | Prisma.TutorSubjectWhereInput[]
   tutorProfileId?: Prisma.StringFilter<"TutorSubject"> | string
   categoryId?: Prisma.StringFilter<"TutorSubject"> | string
-  thumbnail?: Prisma.StringNullableFilter<"TutorSubject"> | string | null
+  title?: Prisma.StringNullableFilter<"TutorSubject"> | string | null
   tutorProfile?: Prisma.XOR<Prisma.TutorProfileScalarRelationFilter, Prisma.TutorProfileWhereInput>
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
+  bookings?: Prisma.BookingListRelationFilter
 }, "id" | "tutorProfileId_categoryId">
 
 export type TutorSubjectOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tutorProfileId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
-  thumbnail?: Prisma.SortOrderInput | Prisma.SortOrder
+  title?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.TutorSubjectCountOrderByAggregateInput
   _max?: Prisma.TutorSubjectMaxOrderByAggregateInput
   _min?: Prisma.TutorSubjectMinOrderByAggregateInput
@@ -217,54 +220,58 @@ export type TutorSubjectScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"TutorSubject"> | string
   tutorProfileId?: Prisma.StringWithAggregatesFilter<"TutorSubject"> | string
   categoryId?: Prisma.StringWithAggregatesFilter<"TutorSubject"> | string
-  thumbnail?: Prisma.StringNullableWithAggregatesFilter<"TutorSubject"> | string | null
+  title?: Prisma.StringNullableWithAggregatesFilter<"TutorSubject"> | string | null
 }
 
 export type TutorSubjectCreateInput = {
   id?: string
-  thumbnail?: string | null
+  title?: string | null
   tutorProfile: Prisma.TutorProfileCreateNestedOneWithoutSubjectsInput
   category: Prisma.CategoryCreateNestedOneWithoutTutorSubjectsInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutTutorSubjectInput
 }
 
 export type TutorSubjectUncheckedCreateInput = {
   id?: string
   tutorProfileId: string
   categoryId: string
-  thumbnail?: string | null
+  title?: string | null
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTutorSubjectInput
 }
 
 export type TutorSubjectUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutorProfile?: Prisma.TutorProfileUpdateOneRequiredWithoutSubjectsNestedInput
   category?: Prisma.CategoryUpdateOneRequiredWithoutTutorSubjectsNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutTutorSubjectNestedInput
 }
 
 export type TutorSubjectUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tutorProfileId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutTutorSubjectNestedInput
 }
 
 export type TutorSubjectCreateManyInput = {
   id?: string
   tutorProfileId: string
   categoryId: string
-  thumbnail?: string | null
+  title?: string | null
 }
 
 export type TutorSubjectUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TutorSubjectUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tutorProfileId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TutorSubjectListRelationFilter = {
@@ -286,21 +293,26 @@ export type TutorSubjectCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tutorProfileId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
-  thumbnail?: Prisma.SortOrder
+  title?: Prisma.SortOrder
 }
 
 export type TutorSubjectMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tutorProfileId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
-  thumbnail?: Prisma.SortOrder
+  title?: Prisma.SortOrder
 }
 
 export type TutorSubjectMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tutorProfileId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
-  thumbnail?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+}
+
+export type TutorSubjectNullableScalarRelationFilter = {
+  is?: Prisma.TutorSubjectWhereInput | null
+  isNot?: Prisma.TutorSubjectWhereInput | null
 }
 
 export type TutorSubjectCreateNestedManyWithoutTutorProfileInput = {
@@ -387,16 +399,34 @@ export type TutorSubjectUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.TutorSubjectScalarWhereInput | Prisma.TutorSubjectScalarWhereInput[]
 }
 
+export type TutorSubjectCreateNestedOneWithoutBookingsInput = {
+  create?: Prisma.XOR<Prisma.TutorSubjectCreateWithoutBookingsInput, Prisma.TutorSubjectUncheckedCreateWithoutBookingsInput>
+  connectOrCreate?: Prisma.TutorSubjectCreateOrConnectWithoutBookingsInput
+  connect?: Prisma.TutorSubjectWhereUniqueInput
+}
+
+export type TutorSubjectUpdateOneWithoutBookingsNestedInput = {
+  create?: Prisma.XOR<Prisma.TutorSubjectCreateWithoutBookingsInput, Prisma.TutorSubjectUncheckedCreateWithoutBookingsInput>
+  connectOrCreate?: Prisma.TutorSubjectCreateOrConnectWithoutBookingsInput
+  upsert?: Prisma.TutorSubjectUpsertWithoutBookingsInput
+  disconnect?: Prisma.TutorSubjectWhereInput | boolean
+  delete?: Prisma.TutorSubjectWhereInput | boolean
+  connect?: Prisma.TutorSubjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TutorSubjectUpdateToOneWithWhereWithoutBookingsInput, Prisma.TutorSubjectUpdateWithoutBookingsInput>, Prisma.TutorSubjectUncheckedUpdateWithoutBookingsInput>
+}
+
 export type TutorSubjectCreateWithoutTutorProfileInput = {
   id?: string
-  thumbnail?: string | null
+  title?: string | null
   category: Prisma.CategoryCreateNestedOneWithoutTutorSubjectsInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutTutorSubjectInput
 }
 
 export type TutorSubjectUncheckedCreateWithoutTutorProfileInput = {
   id?: string
   categoryId: string
-  thumbnail?: string | null
+  title?: string | null
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTutorSubjectInput
 }
 
 export type TutorSubjectCreateOrConnectWithoutTutorProfileInput = {
@@ -432,19 +462,21 @@ export type TutorSubjectScalarWhereInput = {
   id?: Prisma.StringFilter<"TutorSubject"> | string
   tutorProfileId?: Prisma.StringFilter<"TutorSubject"> | string
   categoryId?: Prisma.StringFilter<"TutorSubject"> | string
-  thumbnail?: Prisma.StringNullableFilter<"TutorSubject"> | string | null
+  title?: Prisma.StringNullableFilter<"TutorSubject"> | string | null
 }
 
 export type TutorSubjectCreateWithoutCategoryInput = {
   id?: string
-  thumbnail?: string | null
+  title?: string | null
   tutorProfile: Prisma.TutorProfileCreateNestedOneWithoutSubjectsInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutTutorSubjectInput
 }
 
 export type TutorSubjectUncheckedCreateWithoutCategoryInput = {
   id?: string
   tutorProfileId: string
-  thumbnail?: string | null
+  title?: string | null
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTutorSubjectInput
 }
 
 export type TutorSubjectCreateOrConnectWithoutCategoryInput = {
@@ -473,70 +505,149 @@ export type TutorSubjectUpdateManyWithWhereWithoutCategoryInput = {
   data: Prisma.XOR<Prisma.TutorSubjectUpdateManyMutationInput, Prisma.TutorSubjectUncheckedUpdateManyWithoutCategoryInput>
 }
 
+export type TutorSubjectCreateWithoutBookingsInput = {
+  id?: string
+  title?: string | null
+  tutorProfile: Prisma.TutorProfileCreateNestedOneWithoutSubjectsInput
+  category: Prisma.CategoryCreateNestedOneWithoutTutorSubjectsInput
+}
+
+export type TutorSubjectUncheckedCreateWithoutBookingsInput = {
+  id?: string
+  tutorProfileId: string
+  categoryId: string
+  title?: string | null
+}
+
+export type TutorSubjectCreateOrConnectWithoutBookingsInput = {
+  where: Prisma.TutorSubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.TutorSubjectCreateWithoutBookingsInput, Prisma.TutorSubjectUncheckedCreateWithoutBookingsInput>
+}
+
+export type TutorSubjectUpsertWithoutBookingsInput = {
+  update: Prisma.XOR<Prisma.TutorSubjectUpdateWithoutBookingsInput, Prisma.TutorSubjectUncheckedUpdateWithoutBookingsInput>
+  create: Prisma.XOR<Prisma.TutorSubjectCreateWithoutBookingsInput, Prisma.TutorSubjectUncheckedCreateWithoutBookingsInput>
+  where?: Prisma.TutorSubjectWhereInput
+}
+
+export type TutorSubjectUpdateToOneWithWhereWithoutBookingsInput = {
+  where?: Prisma.TutorSubjectWhereInput
+  data: Prisma.XOR<Prisma.TutorSubjectUpdateWithoutBookingsInput, Prisma.TutorSubjectUncheckedUpdateWithoutBookingsInput>
+}
+
+export type TutorSubjectUpdateWithoutBookingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tutorProfile?: Prisma.TutorProfileUpdateOneRequiredWithoutSubjectsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutTutorSubjectsNestedInput
+}
+
+export type TutorSubjectUncheckedUpdateWithoutBookingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tutorProfileId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
 export type TutorSubjectCreateManyTutorProfileInput = {
   id?: string
   categoryId: string
-  thumbnail?: string | null
+  title?: string | null
 }
 
 export type TutorSubjectUpdateWithoutTutorProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.CategoryUpdateOneRequiredWithoutTutorSubjectsNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutTutorSubjectNestedInput
 }
 
 export type TutorSubjectUncheckedUpdateWithoutTutorProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutTutorSubjectNestedInput
 }
 
 export type TutorSubjectUncheckedUpdateManyWithoutTutorProfileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type TutorSubjectCreateManyCategoryInput = {
   id?: string
   tutorProfileId: string
-  thumbnail?: string | null
+  title?: string | null
 }
 
 export type TutorSubjectUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutorProfile?: Prisma.TutorProfileUpdateOneRequiredWithoutSubjectsNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutTutorSubjectNestedInput
 }
 
 export type TutorSubjectUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tutorProfileId?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutTutorSubjectNestedInput
 }
 
 export type TutorSubjectUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tutorProfileId?: Prisma.StringFieldUpdateOperationsInput | string
-  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+
+/**
+ * Count Type TutorSubjectCountOutputType
+ */
+
+export type TutorSubjectCountOutputType = {
+  bookings: number
+}
+
+export type TutorSubjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  bookings?: boolean | TutorSubjectCountOutputTypeCountBookingsArgs
+}
+
+/**
+ * TutorSubjectCountOutputType without action
+ */
+export type TutorSubjectCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TutorSubjectCountOutputType
+   */
+  select?: Prisma.TutorSubjectCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TutorSubjectCountOutputType without action
+ */
+export type TutorSubjectCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BookingWhereInput
+}
 
 
 export type TutorSubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   tutorProfileId?: boolean
   categoryId?: boolean
-  thumbnail?: boolean
+  title?: boolean
   tutorProfile?: boolean | Prisma.TutorProfileDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
+  bookings?: boolean | Prisma.TutorSubject$bookingsArgs<ExtArgs>
+  _count?: boolean | Prisma.TutorSubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tutorSubject"]>
 
 export type TutorSubjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   tutorProfileId?: boolean
   categoryId?: boolean
-  thumbnail?: boolean
+  title?: boolean
   tutorProfile?: boolean | Prisma.TutorProfileDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tutorSubject"]>
@@ -545,7 +656,7 @@ export type TutorSubjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   tutorProfileId?: boolean
   categoryId?: boolean
-  thumbnail?: boolean
+  title?: boolean
   tutorProfile?: boolean | Prisma.TutorProfileDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tutorSubject"]>
@@ -554,13 +665,15 @@ export type TutorSubjectSelectScalar = {
   id?: boolean
   tutorProfileId?: boolean
   categoryId?: boolean
-  thumbnail?: boolean
+  title?: boolean
 }
 
-export type TutorSubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tutorProfileId" | "categoryId" | "thumbnail", ExtArgs["result"]["tutorSubject"]>
+export type TutorSubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tutorProfileId" | "categoryId" | "title", ExtArgs["result"]["tutorSubject"]>
 export type TutorSubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tutorProfile?: boolean | Prisma.TutorProfileDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
+  bookings?: boolean | Prisma.TutorSubject$bookingsArgs<ExtArgs>
+  _count?: boolean | Prisma.TutorSubjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TutorSubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tutorProfile?: boolean | Prisma.TutorProfileDefaultArgs<ExtArgs>
@@ -576,12 +689,13 @@ export type $TutorSubjectPayload<ExtArgs extends runtime.Types.Extensions.Intern
   objects: {
     tutorProfile: Prisma.$TutorProfilePayload<ExtArgs>
     category: Prisma.$CategoryPayload<ExtArgs>
+    bookings: Prisma.$BookingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     tutorProfileId: string
     categoryId: string
-    thumbnail: string | null
+    title: string | null
   }, ExtArgs["result"]["tutorSubject"]>
   composites: {}
 }
@@ -978,6 +1092,7 @@ export interface Prisma__TutorSubjectClient<T, Null = never, ExtArgs extends run
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tutorProfile<T extends Prisma.TutorProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TutorProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__TutorProfileClient<runtime.Types.Result.GetResult<Prisma.$TutorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.CategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  bookings<T extends Prisma.TutorSubject$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TutorSubject$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1010,7 +1125,7 @@ export interface TutorSubjectFieldRefs {
   readonly id: Prisma.FieldRef<"TutorSubject", 'String'>
   readonly tutorProfileId: Prisma.FieldRef<"TutorSubject", 'String'>
   readonly categoryId: Prisma.FieldRef<"TutorSubject", 'String'>
-  readonly thumbnail: Prisma.FieldRef<"TutorSubject", 'String'>
+  readonly title: Prisma.FieldRef<"TutorSubject", 'String'>
 }
     
 
@@ -1404,6 +1519,30 @@ export type TutorSubjectDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many TutorSubjects to delete.
    */
   limit?: number
+}
+
+/**
+ * TutorSubject.bookings
+ */
+export type TutorSubject$bookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Booking
+   */
+  select?: Prisma.BookingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Booking
+   */
+  omit?: Prisma.BookingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingInclude<ExtArgs> | null
+  where?: Prisma.BookingWhereInput
+  orderBy?: Prisma.BookingOrderByWithRelationInput | Prisma.BookingOrderByWithRelationInput[]
+  cursor?: Prisma.BookingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BookingScalarFieldEnum | Prisma.BookingScalarFieldEnum[]
 }
 
 /**
