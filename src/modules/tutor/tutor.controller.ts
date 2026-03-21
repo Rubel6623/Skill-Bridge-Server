@@ -115,7 +115,9 @@ const updateAvailability = async (req: Request, res: Response) => {
 
 const getAllTutorSubjects = async (req: Request, res: Response) => {
   try {
-    const result = await TutorServices.getAllTutorSubjects();
+    const { searchTerm } = req.query;
+    
+    const result = await TutorServices.getAllTutorSubjects(searchTerm as string);
 
     res.status(200).json({
       success: true,
@@ -130,11 +132,30 @@ const getAllTutorSubjects = async (req: Request, res: Response) => {
   }
 };
 
+const getMySubjects = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const result = await TutorServices.getMySubjectsFromDB(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Your subjects retrieved successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
 export const TutorController = {
   createTutorProfile,
   getAllTutors,
   getTutorById,
   updateTutorProfile,
   updateAvailability,
-  getAllTutorSubjects
+  getAllTutorSubjects,
+  getMySubjects
 };

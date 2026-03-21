@@ -160,10 +160,32 @@ const updateAvailability = async (tutorProfileId: string, availabilityData: any[
   });
 };
 
-const getAllTutorSubjects = async () => {
+const getAllTutorSubjects = async (searchTerm?: string) => {
+  const where: any = {};
+
+  if (searchTerm) {
+    where.OR = [
+      {
+        title: {
+          contains: searchTerm,
+          mode: 'insensitive', 
+        },
+      },
+      {
+        category: {
+          name: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+      },
+    ];
+  }
+
   const result = await prisma.tutorSubject.findMany({
+    where,
     include: {
-      category: true, 
+      category: true,
       tutorProfile: {
         include: {
           user: {
@@ -180,7 +202,19 @@ const getAllTutorSubjects = async () => {
   return result;
 };
 
-
+const getMySubjectsFromDB = async (userId: string) => {
+  const result = await prisma.tutorSubject.findMany({
+    where: {
+      tutorProfile: {
+        userId: userId,
+      },
+    },
+    include: {
+      category: true,
+    },
+  });
+  return result;
+};
 
 export const TutorServices = {
   createTutorProfileIntoDB,
@@ -188,5 +222,6 @@ export const TutorServices = {
   getTutorById,
   updateTutorProfile,
   updateAvailability,
-  getAllTutorSubjects
+  getAllTutorSubjects,
+  getMySubjectsFromDB
 };

@@ -10,6 +10,6 @@ router.get("/booking", auth(UserRole.student, UserRole.tutor, UserRole.admin), B
 
 router.get("/booking/:id", auth(UserRole.student, UserRole.tutor, UserRole.admin), BookingController.getBookingById);
 
-router.put("/booking/:id/status", auth(UserRole.admin, UserRole.tutor),BookingController.updateBookingStatus); 
+router.put("/booking/status/:bookingId", auth(UserRole.admin, UserRole.tutor),BookingController.updateBookingStatus); 
 
 export const BookingRoutes = router;

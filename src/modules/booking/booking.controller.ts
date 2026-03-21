@@ -4,7 +4,7 @@ import { BookingStatus } from "../../../generated/prisma/enums";
 
 const createBooking = async (req: Request, res: Response) => {
   try {
-    const { studentId, tutorProfileId, startTime, endTime, totalPrice } = req.body;
+    const { studentId, tutorProfileId,tutorSubjectId, startTime, endTime, totalPrice } = req.body;
 
     if (new Date(startTime) >= new Date(endTime)) {
       res.status(400).json({ 
@@ -14,7 +14,7 @@ const createBooking = async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await BookingServices.createBooking({ studentId, tutorProfileId, startTime, endTime, totalPrice });
+    const result = await BookingServices.createBooking({ studentId, tutorProfileId,tutorSubjectId, startTime, endTime, totalPrice });
 
     res.status(201).json({
       success: true,
@@ -82,10 +82,12 @@ const getBookingById = async (req: Request, res: Response) => {
 
 const updateBookingStatus = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { bookingId } = req.params;
     const { status } = req.body as { status: BookingStatus };
+    const userId = (req as any).user.id;
+    const role = (req as any).user.role;
 
-    const result = await BookingServices.updateBookingStatus(id as string, status);
+    const result = await BookingServices.updateBookingStatus(bookingId as string, status,userId,role);
 
     res.status(200).json({
       success: true,

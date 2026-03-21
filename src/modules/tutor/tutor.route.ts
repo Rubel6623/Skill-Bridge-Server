@@ -14,6 +14,12 @@ router.put("/tutors/profile", auth(UserRole.tutor), TutorController.updateTutorP
 
 router.get("/tutor-subjects", TutorController.getAllTutorSubjects);
 
+router.get(
+  "/my-subjects", 
+  auth(UserRole.tutor), 
+  TutorController.getMySubjects
+);
+
 router.put("/tutors/availability/:id", TutorController.updateAvailability);
 
 export const TutorRoutes = router;
