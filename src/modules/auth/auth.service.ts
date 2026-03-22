@@ -90,8 +90,26 @@ const getMeFromDB = async (userId: string) => {
 };
 
 
+const updateMeInDB = async (userId: string, payload: Partial<IRegisterPayload>) => {
+  const result = await prisma.user.update({
+    where: { id: userId },
+    data: payload,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      avatar: true,
+      status: true,
+      createdAt: true
+    }
+  });
+  return result;
+};
+
 export const AuthService = {
   createUserIntoDB,
   loginUserIntoDB,
-  getMeFromDB
-};
+  getMeFromDB,
+  updateMeInDB
+};

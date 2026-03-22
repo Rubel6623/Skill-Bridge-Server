@@ -27,4 +27,25 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello from Skill Bridge World!');
 });
 
+// global error handler
+app.use((err: any, req: Request, res: Response, next: any) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Something went wrong!';
+  
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    error: err,
+  });
+});
+
+// handle 404
+app.use((req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found!',
+  });
+});
+
 export default app;
+

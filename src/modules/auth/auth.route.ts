@@ -9,6 +9,7 @@ router.post('/register',AuthController.createUser);
 router.post('/login',AuthController.loginUser);
 
 router.get('/me',auth(UserRole.admin,UserRole.student,UserRole.tutor),AuthController.getMe)
+router.put('/me',auth(UserRole.admin,UserRole.student,UserRole.tutor),AuthController.updateMe)
 // router.post('/api/auth/login',AuthController.loginUser)
 
-export const AuthRoutes = router;
+export const AuthRoutes = router;

@@ -68,8 +68,31 @@ const getMe = async (req: Request, res: Response) => {
 };
 
 
+const updateMe = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const { name, avatar } = req.body; 
+
+    const result = await AuthService.updateMeInDB(userId, { name, avatar });
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
+
 export const AuthController = {
   createUser,
   loginUser,
-  getMe
+  getMe,
+  updateMe
 };
+
