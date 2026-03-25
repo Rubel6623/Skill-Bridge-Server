@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ReviewServices } from "./review.service";
+import { prisma } from "../../lib/prisma";
 
 const createReview = async (req: Request, res: Response) => {
   try {
@@ -50,8 +51,41 @@ const getReviewsByTutor = async (req: Request, res: Response) => {
     });
   }
 };
+const getMyReviews = async (req: Request, res: Response) => {
+  try {
+    // This requires auth middleware to provide req.user
+    const userId = (req as any).user.id;
+
+    // 1. Find the tutor profile associated with this user
+    const tutorProfile = await prisma.tutorProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!tutorProfile) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Tutor profile not found for this account" 
+      });
+    }
+
+    // 2. Fetch reviews using the tutor profile ID
+    const result = await ReviewServices.getReviewsByTutor(tutorProfile.id);
+
+    res.status(200).json({
+      success: true,
+      message: "Your reviews retrieved successfully",
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 
 export const ReviewController = {
   createReview,
   getReviewsByTutor,
+  getMyReviews,
 };

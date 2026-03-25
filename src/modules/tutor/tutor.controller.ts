@@ -68,6 +68,25 @@ const getTutorById = async (req: Request, res: Response) => {
   }
 };
 
+const getMyProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const result = await TutorServices.getTutorById(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Your profile fetched successfully",
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+      details: err,
+    });
+  }
+};
+
 const updateTutorProfile = async (req: Request, res: Response) => {
   try {
     const userID = (req as any).user.id;
@@ -150,12 +169,42 @@ const getMySubjects = async (req: Request, res: Response) => {
   }
 };
 
+const getTutorSubjectById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    console.log(`[Controller] GET /tutor-subjects/${id}`);
+    
+    const result = await TutorServices.getTutorSubjectById(id as string);
+
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Course/Subject not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Subject details retrieved successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
 export const TutorController = {
   createTutorProfile,
   getAllTutors,
   getTutorById,
+  getMyProfile,
   updateTutorProfile,
   updateAvailability,
   getAllTutorSubjects,
-  getMySubjects
+  getMySubjects,
+  getTutorSubjectById
 };

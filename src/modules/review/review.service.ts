@@ -48,7 +48,19 @@ const getReviewsByTutor = async (tutorProfileId: string) => {
   return result;
 };
 
+// Inside review.service.ts
+const getMyReviewsAsTutor = async (userId: string) => {
+  const tutorProfile = await prisma.tutorProfile.findUnique({
+    where: { userId },
+  });
+
+  if (!tutorProfile) throw new Error("Tutor profile not found");
+
+  return await getReviewsByTutor(tutorProfile.id);
+};
+
 export const ReviewServices = {
   createReview,
   getReviewsByTutor,
+  getMyReviewsAsTutor,
 };

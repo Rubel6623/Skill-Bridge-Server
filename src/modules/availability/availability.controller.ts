@@ -50,7 +50,34 @@ const getTutorAvailability = async (req: Request, res: Response) => {
   }
 };
 
+const getMyAvailability = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    
+    const tutorProfile = await prisma.tutorProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!tutorProfile) {
+      return res.status(404).json({ success: false, message: "Tutor profile not found" });
+    }
+
+    const result = await AvailabilityService.getTutorAvailabilityFromDB(tutorProfile.id);
+    res.status(200).json({
+      success: true,
+      message: "Your availability fetched successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
 export const AvailabilityController = {
   setAvailability,
   getTutorAvailability,
+  getMyAvailability,
 };

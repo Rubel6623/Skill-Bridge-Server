@@ -8,11 +8,14 @@ router.post('/tutors/create-profile',auth(UserRole.tutor),TutorController.create
 
 router.get("/tutors", TutorController.getAllTutors);
 
+router.get("/tutors/profile/me", auth(UserRole.tutor), TutorController.getMyProfile);
+
 router.get("/tutors/:id", TutorController.getTutorById);
 
 router.put("/tutors/profile", auth(UserRole.tutor), TutorController.updateTutorProfile);
 
 router.get("/tutor-subjects", TutorController.getAllTutorSubjects);
+router.get("/tutor-subjects/:id", TutorController.getTutorSubjectById);
 
 router.get(
   "/my-subjects", 
@@ -20,6 +23,6 @@ router.get(
   TutorController.getMySubjects
 );
 
-router.put("/tutors/availability/:id", TutorController.updateAvailability);
+router.put("/tutors/availability/:id", auth(UserRole.tutor), TutorController.updateAvailability);
 
 export const TutorRoutes = router;

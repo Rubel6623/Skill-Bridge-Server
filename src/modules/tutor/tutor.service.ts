@@ -77,8 +77,13 @@ const getAllTutors = async (filters: any) => {
 
 
 const getTutorById = async (id: string) => {
-  const result = await prisma.tutorProfile.findUnique({
-    where: { id },
+  const result = await prisma.tutorProfile.findFirst({
+    where: {
+      OR: [
+        { id: id },
+        { userId: id }
+      ]
+    },
     include: {
       user: {
         select: {
@@ -186,6 +191,7 @@ const getAllTutorSubjects = async (searchTerm?: string) => {
     where,
     include: {
       category: true,
+      bookings: true,
       tutorProfile: {
         include: {
           user: {
@@ -216,6 +222,32 @@ const getMySubjectsFromDB = async (userId: string) => {
   return result;
 };
 
+const getTutorSubjectById = async (id: string) => {
+  console.log(`[Service] Backend lookup for Subject ID: "${id}"`);
+  const result = await prisma.tutorSubject.findUnique({
+    where: { id },
+    include: {
+      category: true,
+      tutorProfile: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              avatar: true,
+            },
+          },
+          subjects: { include: { category: true } },
+          availability: true,
+        },
+      },
+    },
+  });
+  console.log(`[Service] Backend lookup result for "${id}":`, result ? "FOUND" : "NOT FOUND");
+  return result;
+};
+
 export const TutorServices = {
   createTutorProfileIntoDB,
   getAllTutors,
@@ -223,5 +255,6 @@ export const TutorServices = {
   updateTutorProfile,
   updateAvailability,
   getAllTutorSubjects,
-  getMySubjectsFromDB
+  getMySubjectsFromDB,
+  getTutorSubjectById
 };

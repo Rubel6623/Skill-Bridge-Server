@@ -4,7 +4,10 @@ import { BookingStatus } from "../../../generated/prisma/enums";
 
 const createBooking = async (req: Request, res: Response) => {
   try {
-    const { studentId, tutorProfileId,tutorSubjectId, startTime, endTime, totalPrice } = req.body;
+    const { startTime, endTime } = req.body;
+
+    const studentId = (req as any).user.id; 
+    const bookingData = { ...req.body, studentId };
 
     if (new Date(startTime) >= new Date(endTime)) {
       res.status(400).json({ 
@@ -14,7 +17,7 @@ const createBooking = async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await BookingServices.createBooking({ studentId, tutorProfileId,tutorSubjectId, startTime, endTime, totalPrice });
+    const result = await BookingServices.createBooking(bookingData);
 
     res.status(201).json({
       success: true,
@@ -45,6 +48,24 @@ const getUserBookings = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Bookings retrieved successfully",
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+      details: err,
+    });
+  }
+};
+
+const getAllBookings = async (req: Request, res: Response) => {
+  try {
+    const result = await BookingServices.getAllBookings();
+
+    res.status(200).json({
+      success: true,
+      message: "All bookings retrieved successfully",
       data: result,
     });
   } catch (err: any) {
@@ -103,9 +124,32 @@ const updateBookingStatus = async (req: Request, res: Response) => {
   }
 };
 
+const deleteBooking = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const role = (req as any).user.role;
+
+    const result = await BookingServices.deleteBooking(id as string, role);
+
+    res.status(200).json({
+      success: true,
+      message: "Booking deleted successfully",
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+      details: err,
+    });
+  }
+};
+
 export const BookingController = {
   createBooking,
   getUserBookings,
+  getAllBookings,
   getBookingById,
   updateBookingStatus,
+  deleteBooking,
 };

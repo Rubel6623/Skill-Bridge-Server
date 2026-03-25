@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.put('/tutor/availability',auth(UserRole.tutor),AvailabilityController.setAvailability);
 
+router.get('/tutor/availability/me', auth(UserRole.tutor), AvailabilityController.getMyAvailability);
+
 router.get('/:tutorProfileId',AvailabilityController.getTutorAvailability);
 
 export const AvailabilityRoutes = router;
