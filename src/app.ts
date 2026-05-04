@@ -7,6 +7,7 @@ import { CategoryRoutes } from './modules/category/category.route';
 import { BookingRoutes } from './modules/booking/booking.route';
 import { ReviewRoutes } from './modules/review/review.route';
 import { AvailabilityRoutes } from './modules/availability/availability.route';
+import { BlogRoutes } from './modules/blog/blog.route';
 
 
 const app: Application = express();
@@ -21,6 +22,7 @@ app.use('/api', CategoryRoutes);
 app.use('/api', BookingRoutes);
 app.use('/api', ReviewRoutes);
 app.use('/api', AvailabilityRoutes)
+app.use('/api/blogs', BlogRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {

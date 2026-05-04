@@ -25,6 +25,12 @@ enum Status {
   BANNED
 }
 
+enum BlogStatus{
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id        String   @id @default(uuid())
   name      String
@@ -39,6 +45,7 @@ model User {
   tutorProfile TutorProfile?
   bookings     Booking[]     @relation("StudentBookings")
   reviews      Review[]
+  blogs        Blog[]
 
   @@index([status])
   @@map("users")
@@ -131,4 +138,28 @@ model Review {
 
   bookingId String  @unique
   booking   Booking @relation(fields: [bookingId], references: [id])
+}
+
+model Blog {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  thumbnail   String?
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  categoryId  String?
+  category    BlogCategory? @relation(fields: [categoryId], references: [id])
+  status      BlogStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("blogs")
+}
+
+model BlogCategory {
+  id    String @id @default(uuid())
+  name  String @unique
+  blogs Blog[]
+
+  @@map("blog_categories")
 }
