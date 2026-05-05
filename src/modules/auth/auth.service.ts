@@ -14,6 +14,12 @@ interface IRegisterPayload extends ILoginPayload {
   avatar?: string;
 }
 
+interface ISocialLoginPayload {
+  email: string;
+  name: string;
+  avatar?: string;
+}
+
 const createUserIntoDB = async (payload: IRegisterPayload) => {
     const hashPassword = await bcrypt.hash(payload.password, 8);
 
@@ -50,7 +56,7 @@ const loginUserIntoDB = async (payload: ILoginPayload) => {
     status: user.status
   }
 
-  const token  = jwt.sign(userData, process.env.JWT_SECRET as string, {expiresIn: '1d'});
+  const token  = jwt.sign(userData, (process.env.JWT_SECRET as string).trim(), {expiresIn: '1d'});
 
   return {
     token,
@@ -61,6 +67,46 @@ const loginUserIntoDB = async (payload: ILoginPayload) => {
       role: user.role,
       status: user.status
     }
+  };
+};
+
+const socialLoginIntoDB = async (payload: ISocialLoginPayload) => {
+  let user = await prisma.user.findUnique({
+    where: {
+      email: payload.email,
+    },
+  });
+
+  if (!user) {
+    // Create user if not exists
+    // Social login users get a default role of STUDENT if not specified
+    // and a random/empty password since they login via social
+    user = await prisma.user.create({
+      data: {
+        email: payload.email,
+        name: payload.name,
+        avatar: payload.avatar,
+        password: await bcrypt.hash(Math.random().toString(36).slice(-8), 8),
+        role: Role.STUDENT,
+      },
+    });
+  }
+
+  const userData = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    status: user.status,
+  };
+
+  const token = jwt.sign(userData, (process.env.JWT_SECRET as string).trim(), {
+    expiresIn: "1d",
+  });
+
+  return {
+    token,
+    user: userData,
   };
 };
 
@@ -110,6 +156,7 @@ const updateMeInDB = async (userId: string, payload: Partial<IRegisterPayload>) 
 export const AuthService = {
   createUserIntoDB,
   loginUserIntoDB,
+  socialLoginIntoDB,
   getMeFromDB,
   updateMeInDB
-};
+};

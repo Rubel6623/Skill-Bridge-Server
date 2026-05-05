@@ -156,6 +156,14 @@ const approveBlog = async (id: string) => {
 
 // Category methods
 const createCategory = async (payload: { name: string }) => {
+  const isExists = await prisma.blogCategory.findUnique({
+    where: { name: payload.name },
+  });
+
+  if (isExists) {
+    throw new Error("Category name already exists");
+  }
+
   const result = await prisma.blogCategory.create({
     data: payload,
   });

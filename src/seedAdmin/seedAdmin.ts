@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma";
-import { UserRole } from "../middlewares/auth";
+import { Role, Status } from "../../generated/prisma/enums";
 import bcrypt from "bcryptjs";
 
 const seedAdmin = async () => {
@@ -8,25 +8,23 @@ const seedAdmin = async () => {
   const adminData = {
     name: process.env.NAME!,
     email: process.env.ADMIN_EMAIL!,
-    role: UserRole.admin,
+    role: Role.ADMIN,
     password: hashedPassword,
+    status: Status.ACTIVE,
   };
 
   try {
-    const isExists = await prisma.user.findUnique({
+    await prisma.user.upsert({
       where: {
         email: adminData.email,
       },
+      update: {
+        status: Status.ACTIVE,
+        role: Role.ADMIN,
+      },
+      create: adminData,
     });
-
-    if (isExists) {
-      console.log("Admin already exists!!");
-      return;
-    }
-    await prisma.user.create({
-      data: adminData,
-    });
-    console.log("Admin created successfully!!");
+    console.log("Admin seeded/updated successfully!!");
   } catch (error) {
     console.log(error);
   } finally{

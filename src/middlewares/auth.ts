@@ -22,22 +22,27 @@ const auth = (...roles: UserRole[]) => {
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET?.trim() as string) as JwtPayload;
-
+      console.log("Decoded Token:", JSON.stringify(decoded));
 
       const userData = await prisma.user.findUnique({
         where: {
           email: decoded.email,
         },
       });
+      console.log("Found User Data:", JSON.stringify(userData));
+
       if (!userData) {
+        console.log("Auth Error: User not found in DB for email:", decoded.email);
         throw new Error("Unauthorized!");
       }
 
       if (userData.status !== "ACTIVE") {
+        console.log("Auth Error: User status is not ACTIVE. Current status:", userData.status);
         throw new Error("Unauthorized!!");
       }
 
-      if (roles.length && !roles.includes(decoded.role)) {
+      if (roles.length && !roles.includes(decoded.role as UserRole)) {
+        console.log("Auth Error: Role mismatch. Required:", roles, "User role:", decoded.role);
         throw new Error("Unauthorized!!!");
       }
 
@@ -45,6 +50,7 @@ const auth = (...roles: UserRole[]) => {
 
       next();
     } catch (error: any) {
+      console.error("Auth Middleware Error:", error.message);
       next(error);
     }
   };

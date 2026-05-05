@@ -117,7 +117,8 @@ const createCategory = async (req: Request, res: Response, next: NextFunction) =
       message: "Blog category created successfully",
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
+    error.statusCode = 400;
     next(error);
   }
 };
@@ -125,6 +126,7 @@ const createCategory = async (req: Request, res: Response, next: NextFunction) =
 const getAllCategories = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await BlogService.getAllCategories();
+    console.log("Server categories result:", result);
     res.status(200).json({
       success: true,
       message: "Blog categories fetched successfully",

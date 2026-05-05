@@ -89,10 +89,33 @@ const updateMe = async (req: Request, res: Response) => {
 };
 
 
+const socialLogin = async (req: Request, res: Response) => {
+  try {
+    const result = await AuthService.socialLoginIntoDB(req.body);
+    res.cookie("token", result.token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
+    res.status(200).json({
+      success: true,
+      message: "User Social Login successfully",
+      data: result,
+    });
+  } catch (e: any) {
+    res.status(400).json({
+      success: false,
+      message: e.message || "Social Login failed",
+      error: e,
+    });
+  }
+};
+
 export const AuthController = {
   createUser,
   loginUser,
+  socialLogin,
   getMe,
-  updateMe
+  updateMe,
 };
 
